@@ -1,0 +1,177 @@
+{% extends "layout.html" %}
+
+{% block title %}CineMate - Đăng nhập{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-5">
+                        <!-- Logo and Title -->
+                        <div class="text-center mb-4">
+                            <h1 class="display-4 text-primary">
+                                <i class="bi bi-film"></i> CineMate
+                            </h1>
+                            <p class="text-muted">Khám phá thế giới điện ảnh cùng AI</p>
+                        </div>
+                        
+                        <!-- Alert Messages -->
+                        {% if error %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill"></i> {{ error }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endif %}
+                        
+                        {% if success %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill"></i> {{ success }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Tabs -->
+                        <ul class="nav nav-pills nav-justified mb-4" id="authTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="login-tab" data-bs-toggle="pill" 
+                                        data-bs-target="#login" type="button" role="tab">
+                                    <i class="bi bi-box-arrow-in-right"></i> Đăng nhập
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="register-tab" data-bs-toggle="pill" 
+                                        data-bs-target="#register" type="button" role="tab">
+                                    <i class="bi bi-person-plus"></i> Đăng ký
+                                </button>
+                            </li>
+                        </ul>
+                        
+                        <!-- Tab Content -->
+                        <div class="tab-content" id="authTabContent">
+                            <!-- Login Form -->
+                            <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                <form method="POST" action="{{ url_for('login') }}">
+                                    <div class="mb-3">
+                                        <label for="login-username" class="form-label">
+                                            <i class="bi bi-person"></i> Username
+                                        </label>
+                                        <input type="text" class="form-control form-control-lg" 
+                                               id="login-username" name="username" 
+                                               placeholder="Nhập username" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="login-password" class="form-label">
+                                            <i class="bi bi-lock"></i> Password
+                                        </label>
+                                        <input type="password" class="form-control form-control-lg" 
+                                               id="login-password" name="password" 
+                                               placeholder="Nhập password" required>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="bi bi-box-arrow-in-right"></i> Đăng nhập
+                                        </button>
+                                    </div>
+                                </form>
+                                
+                                <div class="text-center mt-3">
+                                    <small class="text-muted">
+                                        Chưa có tài khoản? 
+                                        <a href="#" onclick="document.getElementById('register-tab').click(); return false;">
+                                            Đăng ký ngay
+                                        </a>
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <!-- Register Form -->
+                            <div class="tab-pane fade" id="register" role="tabpanel">
+                                <form method="POST" action="{{ url_for('register') }}" id="registerForm">
+                                    <div class="mb-3">
+                                        <label for="register-username" class="form-label">
+                                            <i class="bi bi-person"></i> Username
+                                        </label>
+                                        <input type="text" class="form-control form-control-lg" 
+                                               id="register-username" name="username" 
+                                               placeholder="2-8 ký tự" 
+                                               minlength="2" maxlength="8" required>
+                                        <div class="form-text">
+                                            Username từ 2-8 ký tự (chữ cái thường và số)
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="register-password" class="form-label">
+                                            <i class="bi bi-lock"></i> Password
+                                        </label>
+                                        <input type="password" class="form-control form-control-lg" 
+                                               id="register-password" name="password" 
+                                               placeholder="4 chữ số" 
+                                               pattern="[0-9]{4}" maxlength="4" required>
+                                        <div class="form-text">
+                                            Password phải là 4 chữ số
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="register-password-confirm" class="form-label">
+                                            <i class="bi bi-lock-fill"></i> Xác nhận Password
+                                        </label>
+                                        <input type="password" class="form-control form-control-lg" 
+                                               id="register-password-confirm" name="password_confirm" 
+                                               placeholder="Nhập lại password" 
+                                               pattern="[0-9]{4}" maxlength="4" required>
+                                    </div>
+                                    
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-success btn-lg">
+                                            <i class="bi bi-person-plus"></i> Đăng ký
+                                        </button>
+                                    </div>
+                                </form>
+                                
+                                <div class="text-center mt-3">
+                                    <small class="text-muted">
+                                        Đã có tài khoản? 
+                                        <a href="#" onclick="document.getElementById('login-tab').click(); return false;">
+                                            Đăng nhập ngay
+                                        </a>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Security Notice -->
+                <div class="text-center mt-4">
+                    <small class="text-muted">
+                        <i class="bi bi-shield-check"></i> 
+                        Thông tin của bạn được bảo mật an toàn
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Validate password confirmation
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        const password = document.getElementById('register-password').value;
+        const confirmPassword = document.getElementById('register-password-confirm').value;
+        
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Mật khẩu xác nhận không khớp!');
+            return false;
+        }
+    });
+</script>
+{% endblock %}

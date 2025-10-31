@@ -1,0 +1,394 @@
+{% extends "layout.html" %}
+
+{% block title %}CineMate - Trang chủ{% endblock %}
+
+{% block content %}
+<div class="index-container">
+    <!-- Hero Section with Search -->
+    <section class="hero-section py-5 bg-gradient">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-lg-8 text-center">
+                    <h1 class="display-4 fw-bold text-white mb-3">
+                        Khám Phá Phim Yêu Thích Của Bạn
+                    </h1>
+                    <p class="lead text-white-50 mb-4">
+                        Hệ thống gợi ý phim thông minh với công nghệ AI
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Navigation Tabs -->
+    <section class="py-4" style="background-color: #20232E;">
+        <div class="container">
+            <ul class="nav nav-pills nav-justified filter-nav-tabs" id="searchModeTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="manual-search-tab" data-bs-toggle="pill" 
+                            data-bs-target="#manualSearchMode" type="button" role="tab">
+                        <i class="bi bi-search"></i> Tìm Kiếm Thủ Công
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="flexible-search-tab" data-bs-toggle="pill" 
+                            data-bs-target="#flexibleSearchMode" type="button" role="tab">
+                        <i class="bi bi-funnel"></i> Gợi Ý Linh Hoạt
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </section>
+    
+    <!-- Tab Content -->
+    <div class="tab-content" id="searchModeTabContent" style="background-color: #20232E;">
+        
+        <!-- TAB 1: Manual Search Mode (Original) -->
+        <div class="tab-pane fade show active" id="manualSearchMode" role="tabpanel">
+            <section class="py-4">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-10 col-lg-8">
+                            <!-- Search Form -->
+                            <form id="searchForm" class="search-form">
+                                <div class="input-group input-group-lg shadow-lg">
+                                    <span class="input-group-text bg-white">
+                                        <i class="bi bi-search"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="movieNameInput" 
+                                           placeholder="Nhập tên phim bạn muốn tìm... (VD: Inception, The Matrix)" 
+                                           required>
+                                    <button class="btn btn-primary px-5" type="submit">
+                                        <i class="bi bi-search"></i> Tìm Kiếm
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="text-center py-5" style="display: none;">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 text-muted">Đang tìm kiếm phim cho bạn...</p>
+            </div>
+            
+            <!-- Results Container -->
+            <div id="resultsContainer" style="display: none;">
+        <!-- Section 1: Related Movies (Có thể bạn muốn xem) -->
+        <section class="movie-section py-5">
+            <div class="container">
+                <h2 class="section-title mb-4">
+                    <i class="bi bi-search-heart"></i> Có Thể Bạn Muốn Xem
+                    <small class="text-muted">- Các phim có tên tương đồng</small>
+                </h2>
+                <div id="relatedMoviesCarousel" class="carousel slide" data-bs-ride="false">
+                    <div class="carousel-inner" id="relatedMoviesContainer">
+                        <!-- Related movies will be inserted here -->
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#relatedMoviesCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#relatedMoviesCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div id="relatedMoviesEmpty" class="alert alert-info" style="display: none;">
+                    <i class="bi bi-info-circle"></i> Không tìm thấy phim phù hợp
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 2: Similar Movies (Phim tương tự) -->
+        <section class="movie-section py-5 bg-light">
+            <div class="container">
+                <h2 class="section-title mb-4">
+                    <i class="bi bi-film"></i> Phim Tương Tự
+                    <small class="text-muted">- Dựa trên nội dung phim</small>
+                </h2>
+                <div id="similarMoviesCarousel" class="carousel slide" data-bs-ride="false">
+                    <div class="carousel-inner" id="similarMoviesContainer">
+                        <!-- Similar movies will be inserted here -->
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#similarMoviesCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#similarMoviesCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div id="similarMoviesEmpty" class="alert alert-info" style="display: none;">
+                    <i class="bi bi-info-circle"></i> Không tìm thấy phim tương tự
+                </div>
+            </div>
+        </section>
+        
+        <!-- Section 3: Personalized Movies (Dành riêng cho bạn) -->
+        <section class="movie-section py-5">
+            <div class="container">
+                <h2 class="section-title mb-4">
+                    <i class="bi bi-heart-fill text-danger"></i> Dành Riêng Cho Bạn
+                    <small class="text-muted">- Gợi ý cá nhân hóa</small>
+                </h2>
+                <div id="personalizedMoviesCarousel" class="carousel slide" data-bs-ride="false">
+                    <div class="carousel-inner" id="personalizedMoviesContainer">
+                        <!-- Personalized movies will be inserted here -->
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#personalizedMoviesCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#personalizedMoviesCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div id="personalizedMoviesEmpty" class="alert alert-info" style="display: none;">
+                    <i class="bi bi-info-circle"></i> Chưa có gợi ý cá nhân hóa
+                </div>
+            </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- TAB 2: Flexible Search Mode (New Filter System) -->
+        <div class="tab-pane fade" id="flexibleSearchMode" role="tabpanel">
+            <section class="py-4">
+                <div class="container">
+                    
+                    <!-- Search Box (Optional trong flexible mode) -->
+                    <div class="filter-search-box">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control" id="flexibleSearchInput" 
+                                   placeholder="Tìm kiếm nhanh theo tên phim (tùy chọn)...">
+                        </div>
+                    </div>
+                    
+                    <!-- Filter Panel -->
+                    <div class="filter-panel">
+                        <h4 class="text-center mb-4" style="color: #ffd700;">
+                            <i class="bi bi-funnel-fill"></i> Bộ Lọc Phim
+                        </h4>
+                        
+                        <!-- Filter Section: Quốc Gia -->
+                        <div class="filter-section">
+                            <div class="filter-section-header" data-filter="countries">
+                                <h5 class="filter-section-title">
+                                    <i class="bi bi-globe"></i> Quốc Gia
+                                </h5>
+                                <i class="bi bi-chevron-down filter-section-icon"></i>
+                            </div>
+                            <div class="filter-section-content" id="countriesFilterContent">
+                                <div class="filter-tags-container" id="countriesTags">
+                                    <!-- Tags will be loaded dynamically -->
+                                    <span class="text-muted">Đang tải...</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Filter Section: Thể Loại -->
+                        <div class="filter-section">
+                            <div class="filter-section-header" data-filter="genres">
+                                <h5 class="filter-section-title">
+                                    <i class="bi bi-film"></i> Thể Loại
+                                </h5>
+                                <i class="bi bi-chevron-down filter-section-icon"></i>
+                            </div>
+                            <div class="filter-section-content" id="genresFilterContent">
+                                <div class="filter-tags-container" id="genresTags">
+                                    <!-- Tags will be loaded dynamically -->
+                                    <span class="text-muted">Đang tải...</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Filter Section: Năm Sản Xuất -->
+                        <div class="filter-section">
+                            <div class="filter-section-header" data-filter="years">
+                                <h5 class="filter-section-title">
+                                    <i class="bi bi-calendar"></i> Năm Sản Xuất
+                                </h5>
+                                <i class="bi bi-chevron-down filter-section-icon"></i>
+                            </div>
+                            <div class="filter-section-content" id="yearsFilterContent">
+                                <div class="filter-tags-container" id="yearsTags">
+                                    <!-- Tags will be loaded dynamically -->
+                                    <span class="text-muted">Đang tải...</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Filter Section: Sắp Xếp (Single Select) -->
+                        <div class="filter-section">
+                            <div class="filter-section-header" data-filter="sort">
+                                <h5 class="filter-section-title">
+                                    <i class="bi bi-sort-down"></i> Sắp Xếp
+                                </h5>
+                                <i class="bi bi-chevron-down filter-section-icon"></i>
+                            </div>
+                            <div class="filter-section-content" id="sortFilterContent">
+                                <div class="sort-options" id="sortOptions">
+                                    <!-- Sort options will be loaded dynamically -->
+                                    <span class="text-muted">Đang tải...</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Filter Actions -->
+                        <div class="filter-actions">
+                            <button type="button" class="btn filter-btn filter-btn-secondary" id="clearFiltersBtn">
+                                <i class="bi bi-x-circle"></i> Xóa Bộ Lọc
+                            </button>
+                            <button type="button" class="btn filter-btn filter-btn-primary" id="applyFiltersBtn">
+                                <i class="bi bi-check-circle"></i> Lọc Kết Quả
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Filter Loading Spinner -->
+                    <div id="filterLoadingSpinner" class="filter-loading" style="display: none;">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="filter-loading-text">Đang tìm kiếm phim phù hợp...</p>
+                    </div>
+                    
+                    <!-- Filter Results Container -->
+                    <div id="filterResultsContainer" style="display: none;">
+                        <div class="filter-results-header">
+                            <h3 style="color: #ffd700;">
+                                <i class="bi bi-collection-fill"></i> Kết Quả Tìm Kiếm
+                            </h3>
+                            <p class="filter-results-count">
+                                Tìm thấy <strong id="totalResultsCount">0</strong> phim
+                            </p>
+                        </div>
+                        
+                        <!-- Pagination Section 1 (Movies 1-10) -->
+                        <div class="pagination-section">
+                            <h4 class="pagination-section-title">
+                                <i class="bi bi-1-circle"></i> Phim 1-10
+                            </h4>
+                            <div class="row" id="filterResults1">
+                                <!-- Movies 1-10 will be displayed here -->
+                            </div>
+                            <nav>
+                                <ul class="pagination custom-pagination" id="pagination1">
+                                    <!-- Pagination controls -->
+                                </ul>
+                            </nav>
+                        </div>
+                        
+                        <!-- Pagination Section 2 (Movies 11-20) -->
+                        <div class="pagination-section">
+                            <h4 class="pagination-section-title">
+                                <i class="bi bi-2-circle"></i> Phim 11-20
+                            </h4>
+                            <div class="row" id="filterResults2">
+                                <!-- Movies 11-20 will be displayed here -->
+                            </div>
+                            <nav>
+                                <ul class="pagination custom-pagination" id="pagination2">
+                                    <!-- Pagination controls -->
+                                </ul>
+                            </nav>
+                        </div>
+                        
+                        <!-- Pagination Section 3 (Movies 21-30) -->
+                        <div class="pagination-section">
+                            <h4 class="pagination-section-title">
+                                <i class="bi bi-3-circle"></i> Phim 21-30
+                            </h4>
+                            <div class="row" id="filterResults3">
+                                <!-- Movies 21-30 will be displayed here -->
+                            </div>
+                            <nav>
+                                <ul class="pagination custom-pagination" id="pagination3">
+                                    <!-- Pagination controls -->
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- Movie Detail Modal -->
+<div class="modal fade" id="movieDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold" id="modalMovieTitle">Chi Tiết Phim</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img id="modalMoviePoster" src="" alt="Movie Poster" class="img-fluid rounded shadow">
+                    </div>
+                    <div class="col-md-8">
+                        <h3 id="modalMovieName" class="fw-bold mb-3"></h3>
+                        
+                        <div class="movie-info mb-3">
+                            <p class="mb-2">
+                                <i class="bi bi-calendar3 text-primary"></i>
+                                <strong>Năm phát hành:</strong> 
+                                <span id="modalMovieYear"></span>
+                            </p>
+                            <p class="mb-2">
+                                <i class="bi bi-tags text-success"></i>
+                                <strong>Thể loại:</strong> 
+                                <span id="modalMovieGenres"></span>
+                            </p>
+                            <p class="mb-2">
+                                <i class="bi bi-person-video2 text-warning"></i>
+                                <strong>Đạo diễn:</strong> 
+                                <span id="modalMovieDirector"></span>
+                            </p>
+                            <p class="mb-2">
+                                <i class="bi bi-file-text text-info"></i>
+                                <strong>Nội dung:</strong> 
+                                <span id="modalMovieOverview" class="text-muted"></span>
+                            </p>
+                        </div>
+                        
+                        <div class="rating-section mt-4">
+                            <h6 class="fw-bold mb-3">
+                                <i class="bi bi-star-fill text-warning"></i> Đánh Giá Của Bạn
+                            </h6>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-warning rating-btn" data-rating="1">
+                                    <i class="bi bi-star-fill"></i> 1
+                                </button>
+                                <button type="button" class="btn btn-outline-warning rating-btn" data-rating="2">
+                                    <i class="bi bi-star-fill"></i> 2
+                                </button>
+                                <button type="button" class="btn btn-outline-warning rating-btn" data-rating="3">
+                                    <i class="bi bi-star-fill"></i> 3
+                                </button>
+                                <button type="button" class="btn btn-outline-warning rating-btn" data-rating="4">
+                                    <i class="bi bi-star-fill"></i> 4
+                                </button>
+                                <button type="button" class="btn btn-outline-warning rating-btn" data-rating="5">
+                                    <i class="bi bi-star-fill"></i> 5
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button type="button" class="btn btn-primary btn-lg w-100 mt-4" id="rateMovieBtn">
+                            <i class="bi bi-check-circle"></i> Đã Xem - Lưu Đánh Giá
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

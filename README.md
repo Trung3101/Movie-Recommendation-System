@@ -230,12 +230,12 @@ def hybrid_recommendations(user_id, movie_list, weight_cf=0.6, weight_cb=0.4, n=
 
 ## 📝 License
 
-[Your License Here]
 
 ## 👥 Contributors
 
-- [Your Name]
-- [Team Members]
+- [Trương Phú Triệu]
+- [Đoàn Trần Cao Anh]
+- [Trần Cẩm Tú]
 
 ## 📧 Contact
 

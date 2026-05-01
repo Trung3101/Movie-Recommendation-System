@@ -239,8 +239,7 @@ def hybrid_recommendations(user_id, movie_list, weight_cf=0.6, weight_cb=0.4, n=
 
 ## 📧 Contact
 
-- Email: [your-email@example.com]
-- GitHub: [repository-url]
+- Email: [truongphutrieu18@gmail.com]
 
 ---
 

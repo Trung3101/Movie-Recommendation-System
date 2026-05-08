@@ -14,7 +14,7 @@ Hệ thống gợi ý phim thông minh sử dụng Machine Learning với 2 phư
 ## 🚀 Quick Start - Chạy Web App
 
 ```cmd
-cd "c:\Users\Cao Anh\HUIT - Học Tập\Năm 3\Học ở Trường\Data Mining\Project"
+cd "c:\Users\Phu_Trieu\HUIT - Học Tập\Năm 3\Học ở Trường\Data Mining\Project"
 pip install -r requirements.txt
 cd GUI
 python app.py
